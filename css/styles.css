@@ -1,19 +1,27 @@
-/* Innovative PNG Ltd – Theodist-inspired commercial retail styles */
+/* Innovative PNG Ltd – Brand colours from official logo (blue + orange) */
 
 :root {
-  --red: #c8102e;
-  --red-dark: #9e0c24;
-  --red-light: #e31c3d;
-  --navy: #1a2332;
-  --text: #222;
+  /* Brand from Innovative PNG Ltd logo – blue + orange */
+  --blue: #1a4a8c;
+  --blue-dark: #0f2d5c;
+  --blue-mid: #2b6cb0;
+  --orange: #e8941a;
+  --orange-dark: #c97a0f;
+  --orange-light: #f5a623;
+  --navy: #0f2d5c;
+  --text: #1a2332;
   --muted: #5a6270;
-  --bg: #f5f6f8;
+  --bg: #f5f7fb;
   --white: #ffffff;
-  --border: #e2e5ea;
+  --border: #dce3ee;
   --green: #0d9488;
   --radius: 8px;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  /* aliases so existing class names still work */
+  --red: var(--orange);
+  --red-dark: var(--orange-dark);
+  --red-light: var(--orange-light);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,7 +51,6 @@ h1, h2, h3, h4 {
   color: var(--navy);
 }
 
-/* TOP BAR */
 .topbar {
   background: var(--navy);
   color: rgba(255,255,255,0.85);
@@ -59,7 +66,6 @@ h1, h2, h3, h4 {
 }
 .topbar a:hover { color: #fff; }
 
-/* HEADER */
 .header {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -79,10 +85,15 @@ h1, h2, h3, h4 {
   gap: 0.65rem;
   flex-shrink: 0;
 }
+.logo img.logo-img {
+  height: 52px;
+  width: auto;
+  display: block;
+}
 .logo-mark {
   width: 48px;
   height: 48px;
-  background: var(--red);
+  background: linear-gradient(135deg, var(--blue-mid), var(--orange));
   color: #fff;
   border-radius: 6px;
   display: flex;
@@ -115,7 +126,7 @@ h1, h2, h3, h4 {
   overflow: hidden;
   background: var(--white);
 }
-.search-bar:focus-within { border-color: var(--red); }
+.search-bar:focus-within { border-color: var(--blue); }
 .search-bar input {
   flex: 1;
   border: none;
@@ -135,7 +146,7 @@ h1, h2, h3, h4 {
   max-width: 140px;
 }
 .search-bar button {
-  background: var(--red);
+  background: var(--orange);
   color: #fff;
   border: none;
   padding: 0 1.25rem;
@@ -144,7 +155,7 @@ h1, h2, h3, h4 {
   cursor: pointer;
   font-family: inherit;
 }
-.search-bar button:hover { background: var(--red-dark); }
+.search-bar button:hover { background: var(--orange-dark); }
 
 .header-actions {
   display: flex;
@@ -156,15 +167,11 @@ h1, h2, h3, h4 {
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--navy);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
 }
-.header-link:hover { color: var(--red); }
+.header-link:hover { color: var(--orange); }
 
-/* Category nav */
 .cat-nav {
-  background: var(--red);
+  background: var(--blue);
   color: #fff;
 }
 .cat-nav-inner {
@@ -196,9 +203,8 @@ h1, h2, h3, h4 {
   cursor: pointer;
 }
 
-/* HERO */
 .hero-promo {
-  background: linear-gradient(135deg, #1a2332 0%, #2d1b3d 50%, #c8102e 100%);
+  background: linear-gradient(135deg, #0f2d5c 0%, #1a4a8c 55%, #e8941a 100%);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -251,11 +257,11 @@ h1, h2, h3, h4 {
   transition: all 0.15s;
 }
 .btn-primary {
-  background: var(--red);
+  background: var(--orange);
   color: #fff;
-  border-color: var(--red);
+  border-color: var(--orange);
 }
-.btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+.btn-primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
 .btn-white {
   background: #fff;
   color: var(--navy);
@@ -288,7 +294,6 @@ h1, h2, h3, h4 {
   font-size: 0.9rem;
 }
 
-/* SECTIONS */
 .section { padding: 3rem 0; }
 .section-title { text-align: center; margin-bottom: 0.5rem; }
 .section-sub {
@@ -323,8 +328,8 @@ h1, h2, h3, h4 {
   width: 56px;
   height: 56px;
   margin: 0 auto 1rem;
-  background: #fef2f2;
-  color: var(--red);
+  background: #fff8eb;
+  color: var(--orange);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -343,7 +348,6 @@ h1, h2, h3, h4 {
   line-height: 1.45;
 }
 
-/* PRODUCTS */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -378,7 +382,7 @@ h1, h2, h3, h4 {
   position: absolute;
   top: 0.6rem;
   left: 0.6rem;
-  background: var(--red);
+  background: var(--orange);
   color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
@@ -398,7 +402,7 @@ h1, h2, h3, h4 {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--red);
+  color: var(--orange);
   margin-bottom: 0.3rem;
 }
 .product-title {
@@ -440,7 +444,6 @@ h1, h2, h3, h4 {
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  align-items: center;
 }
 .filter-btn {
   padding: 0.45rem 1rem;
@@ -455,12 +458,11 @@ h1, h2, h3, h4 {
 }
 .filter-btn:hover,
 .filter-btn.active {
-  background: var(--red);
-  border-color: var(--red);
+  background: var(--orange);
+  border-color: var(--orange);
   color: #fff;
 }
 
-/* WHY */
 .why-strip {
   background: var(--white);
   border-top: 1px solid var(--border);
@@ -484,7 +486,6 @@ h1, h2, h3, h4 {
   color: var(--muted);
 }
 
-/* CTA */
 .cta-band {
   background: var(--navy);
   color: #fff;
@@ -500,7 +501,6 @@ h1, h2, h3, h4 {
 .cta-band h2 { color: #fff; margin-bottom: 0.35rem; }
 .cta-band p { opacity: 0.85; font-size: 0.95rem; }
 
-/* PAGE HERO */
 .page-hero {
   background: var(--navy);
   color: #fff;
@@ -510,7 +510,6 @@ h1, h2, h3, h4 {
 .page-hero h1 { color: #fff; }
 .page-hero p { opacity: 0.85; margin-top: 0.5rem; }
 
-/* ABOUT / CONTACT */
 .about-grid, .contact-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -535,7 +534,7 @@ h1, h2, h3, h4 {
   content: "✓";
   position: absolute;
   left: 0;
-  color: var(--red);
+  color: var(--orange);
   font-weight: 700;
 }
 
@@ -558,8 +557,8 @@ h1, h2, h3, h4 {
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(200,16,46,0.12);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(26,74,140,0.12);
 }
 .form-row {
   display: grid;
@@ -583,7 +582,6 @@ h1, h2, h3, h4 {
 .placeholder-image.tall { aspect-ratio: 3/4; }
 .placeholder-image.map { aspect-ratio: 21/9; min-height: 240px; }
 
-/* FOOTER */
 .footer {
   background: var(--navy);
   color: rgba(255,255,255,0.8);
@@ -596,9 +594,13 @@ h1, h2, h3, h4 {
   gap: 2rem;
   padding-bottom: 2rem;
 }
-.footer .logo-mark { background: var(--red); }
+.footer .logo-mark { background: linear-gradient(135deg, var(--blue-mid), var(--orange)); }
 .footer .logo-text strong { color: #fff; }
 .footer .logo-text span { color: rgba(255,255,255,0.55); }
+.footer .logo img.logo-img {
+  height: 48px;
+  filter: brightness(0) invert(1);
+}
 .footer-brand p {
   margin-top: 0.85rem;
   font-size: 0.9rem;
@@ -657,5 +659,4 @@ h1, h2, h3, h4 {
   .cat-nav-inner { display: none; }
   .cat-nav-inner.open { display: flex; flex-direction: column; }
   .menu-toggle { display: block; }
-  .header-actions .header-link span { display: none; }
 }
