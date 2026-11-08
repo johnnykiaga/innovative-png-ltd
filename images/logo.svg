@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 100" width="420" height="100">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2b6cb0"/>
+      <stop offset="100%" style="stop-color:#1a4a8c"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e8941a"/>
+      <stop offset="100%" style="stop-color:#f5a623"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="48" cy="50" rx="36" ry="18" fill="none" stroke="url(#g1)" stroke-width="5" transform="rotate(-35 48 50)"/>
+  <ellipse cx="48" cy="50" rx="36" ry="18" fill="none" stroke="url(#g1)" stroke-width="5" transform="rotate(35 48 50)"/>
+  <path d="M28 58 L48 22 L52 38 L72 30 L48 68 L44 48 Z" fill="url(#g2)"/>
+  <text x="100" y="42" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28" fill="#1a4a8c">INNOVATIVE</text>
+  <text x="100" y="72" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="26" fill="#1a4a8c">PNG <tspan font-size="16" font-weight="600" fill="#2b6cb0">LTD.</tspan></text>
+</svg>

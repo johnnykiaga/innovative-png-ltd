@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | Innovative PNG Ltd – Stationery & Accessories Mount Hagen</title>
   <meta name="description" content="Browse stationery, phone accessories, chargers and laptop essentials at Innovative PNG Ltd in Mount Hagen.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -18,9 +17,8 @@
   </div>
   <header class="header">
     <div class="container header-main">
-      <a href="index.html" class="logo">
-        <div class="logo-mark">IP</div>
-        <div class="logo-text"><strong>Innovative PNG</strong><span>Ltd · Mount Hagen</span></div>
+      <a href="index.html" class="logo" aria-label="Innovative PNG Ltd">
+        <img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img">
       </a>
       <form class="search-bar" action="shop.html" method="get">
         <input type="search" name="q" placeholder="Search products…">
@@ -33,7 +31,7 @@
       </div>
     </div>
     <nav class="cat-nav">
-      <div class="container cat-nav-inner" id="catNav">
+      <div class="container cat-nav-inner">
         <a href="shop.html" class="active">Shop All</a>
         <a href="shop.html#stationery">Stationery</a>
         <a href="shop.html#phone">Phone Accessories</a>
@@ -44,14 +42,12 @@
       </div>
     </nav>
   </header>
-
   <section class="page-hero">
     <div class="container">
       <h1>Shop Stationery & Accessories</h1>
       <p>Quality products for schools, offices and personal use. Prices in PGK.</p>
     </div>
   </section>
-
   <section class="section">
     <div class="container">
       <div class="shop-toolbar" id="filterTabs">
@@ -64,11 +60,12 @@
       <div class="product-grid" id="productGrid"></div>
     </div>
   </section>
-
   <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo"><div class="logo-mark">IP</div><div class="logo-text"><strong>Innovative PNG</strong><span>Ltd</span></div></a>
+        <a href="index.html" class="logo" aria-label="Innovative PNG Ltd">
+          <img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img">
+        </a>
         <p>Stationery, mobile and laptop accessories in Mount Hagen.</p>
       </div>
       <div class="footer-links">
