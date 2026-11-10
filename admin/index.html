@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   <title>Admin | Innovative PNG Ltd</title>
+  <link rel="icon" type="image/svg+xml" href="../images/logo.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -18,16 +20,17 @@
     .login-box { background: var(--card); border-radius: 16px; padding: 2.25rem; width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(15,45,92,.25); }
     .login-logo { text-align: center; margin-bottom: 1.5rem; }
     .login-logo img { height: 56px; margin: 0 auto 0.75rem; display: block; }
-    .login-logo .tagline { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue-mid); }
     .login-box h1 { font-size: 1.25rem; text-align: center; color: var(--blue-dark); }
     .login-box .sub { color: var(--muted); margin: 0.35rem 0 1.5rem; font-size: 0.9rem; text-align: center; }
     .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .form-group label, .field-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.35rem; }
     .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.95rem; }
-    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,74,140,.12); }
+    .form-group input[type=checkbox] { width: auto; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,74,140,.12); }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.65rem 1.15rem; border-radius: 8px; font-family: inherit; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
     .btn-primary { background: var(--orange); color: #fff; }
-    .btn-primary:hover { background: var(--orange-dark); }
+    .btn-primary:hover:not(:disabled) { background: var(--orange-dark); }
     .btn-primary.full { width: 100%; }
     .btn-secondary { background: #fff; color: var(--text); border: 1px solid var(--border); }
     .btn-danger { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
@@ -42,10 +45,16 @@
     .admin-header .brand img { height: 40px; filter: brightness(0) invert(1); }
     .admin-header .brand-text strong { display: block; font-size: 0.95rem; }
     .admin-header .brand-text span { font-size: 0.7rem; opacity: 0.7; letter-spacing: 0.04em; text-transform: uppercase; }
-    .admin-header .actions { display: flex; gap: 0.5rem; }
+    .admin-header .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .admin-header a, .admin-header button.hdr-btn { color: #fff; background: rgba(255,255,255,.12); border: none; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer; text-decoration: none; font-family: inherit; font-weight: 500; }
+    .admin-header button.hdr-btn.publish { background: var(--orange); }
     .admin-body { max-width: 1100px; margin: 0 auto; padding: 1.35rem 1.25rem 4rem; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; margin-bottom: 1.25rem; }
+    .status-bar { border-radius: 10px; padding: 0.7rem 1rem; font-size: 0.875rem; margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .status-bar.clean { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+    .status-bar.draft { background: #fff7ed; border: 1px solid #fed7aa; color: #7c2d12; }
+    .status-bar.warn { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+    .status-bar button, .status-bar a { font: inherit; font-weight: 600; text-decoration: underline; background: none; border: none; color: inherit; cursor: pointer; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem; margin: 1rem 0 1.25rem; }
     .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.15rem; }
     .stat-card .label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
     .stat-card .value { font-size: 1.6rem; font-weight: 800; color: var(--blue-dark); }
@@ -62,15 +71,13 @@
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; gap: 0.75rem; flex-wrap: wrap; }
     .card-header h2 { margin-bottom: 0; }
     .editor-note { background: #eef4fb; border: 1px solid #c5d5ea; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.15rem; font-size: 0.9rem; color: var(--blue-dark); }
-    .page-preview { border: 2px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 8px 30px rgba(15,45,92,.08); }
-    .pp-topbar { background: var(--blue-dark); color: rgba(255,255,255,.85); font-size: 0.7rem; padding: 0.35rem 1rem; display: flex; justify-content: space-between; }
+    .page-preview { border: 2px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 8px 30px rgba(15,45,92,.08); margin-bottom: 1rem; }
+    .pp-topbar { background: var(--blue-dark); color: rgba(255,255,255,.85); font-size: 0.7rem; padding: 0.35rem 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .pp-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; border-bottom: 1px solid var(--border); }
     .pp-header img { height: 32px; }
     .pp-nav { background: var(--blue); color: #fff; font-size: 0.7rem; font-weight: 600; padding: 0.5rem 1rem; display: flex; gap: 0.85rem; flex-wrap: wrap; }
-    .pp-hero { background: linear-gradient(135deg, #0f2d5c 0%, #1a4a8c 55%, #e8941a 100%); color: #fff; padding: 1.5rem 1rem; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; align-items: center; }
-    .pp-hero h2 { font-size: 1.15rem; margin-bottom: 0.35rem; color: #fff; }
-    .pp-hero p { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.65rem; }
-    .pp-hero .mini-btn { display: inline-block; background: var(--orange); color: #fff; font-size: 0.7rem; font-weight: 600; padding: 0.35rem 0.7rem; border-radius: 6px; }
+    .pp-hero { background: linear-gradient(135deg, #0f2d5c 0%, #1a4a8c 55%, #e8941a 100%); color: #fff; padding: 1.5rem 1rem; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; align-items: start; }
+    .pp-hero .mini-label { display: block; font-size: 0.7rem; font-weight: 600; opacity: .85; margin-bottom: 0.2rem; }
     .img-slot { position: relative; border: 2px dashed rgba(255,255,255,0.45); border-radius: 10px; background: rgba(0,0,0,0.15); min-height: 120px; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
     .img-slot:hover { border-color: var(--orange); background: rgba(0,0,0,0.25); }
     .img-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
@@ -78,6 +85,9 @@
     .img-slot.has-image .slot-label { opacity: 0; }
     .img-slot.has-image:hover .slot-label { opacity: 1; background: rgba(0,0,0,.55); border-radius: 6px; }
     .img-slot input[type=file] { display: none; }
+    .img-slot.light { border-color: #c5cad3; background: #eef0f3; color: var(--muted); min-height: 140px; }
+    .img-slot.light .slot-label { color: var(--muted); text-shadow: none; }
+    .img-slot.light:hover { border-color: var(--orange); }
     .pp-section { padding: 1.15rem 1rem; border-top: 1px solid var(--border); }
     .pp-section h3 { font-size: 0.85rem; margin-bottom: 0.65rem; color: var(--blue-dark); }
     .pp-cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
@@ -90,14 +100,9 @@
     .pp-prod-body { padding: 0.4rem 0.5rem; }
     .pp-prod-body strong { display: block; font-size: 0.72rem; }
     .pp-prod-body span { color: var(--muted); }
-    .pp-about { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 0.85rem; align-items: start; }
-    .pp-about .text { font-size: 0.8rem; color: var(--muted); }
-    .img-slot.light { border-color: #c5cad3; background: #eef0f3; color: var(--muted); min-height: 140px; }
-    .img-slot.light .slot-label { color: var(--muted); text-shadow: none; }
-    .img-slot.light:hover { border-color: var(--orange); }
     .slot-actions { display: flex; gap: 0.35rem; margin-top: 0.4rem; flex-wrap: wrap; }
     .text-edit-row { margin-bottom: 0.65rem; }
-    .text-edit-row input, .text-edit-row textarea { width: 100%; padding: 0.45rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.85rem; }
+    .text-edit-row input, .text-edit-row textarea, .bound-input { width: 100%; padding: 0.45rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.85rem; color: var(--text); }
     .toolbar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
     .toolbar input[type=search] { flex: 1; min-width: 140px; padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; }
     .toolbar select { padding: 0.5rem 0.65rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.85rem; background: #fff; }
@@ -107,10 +112,18 @@
     .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .product-info h3 { font-size: 0.9rem; }
     .product-info p { font-size: 0.75rem; color: var(--muted); }
+    .product-info p .nocat { color: var(--danger); font-weight: 600; }
+    .badges { display: flex; gap: 0.25rem; flex-wrap: wrap; }
     .badge { font-size: 0.65rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 999px; background: #d1fae5; color: var(--success); }
-    .badge.out { background: #f3f4f6; color: #6b7280; }
-    .badge.feat { background: #fff7ed; color: var(--orange-dark); margin-left: 0.2rem; }
+    .badge.off { background: #f3f4f6; color: #6b7280; }
+    .badge.out { background: #fef3c7; color: #92400e; }
+    .badge.feat { background: #fff7ed; color: var(--orange-dark); }
     .row-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .cat-row { display: grid; grid-template-columns: 60px 1.1fr 2fr auto auto; gap: 0.6rem; align-items: center; padding: 0.65rem; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 0.55rem; }
+    .cat-row input { width: 100%; padding: 0.45rem 0.65rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
+    .cat-row .cat-icon { text-align: center; font-size: 1.1rem; }
+    .cat-meta { font-size: 0.72rem; color: var(--muted); }
+    .cat-meta code { background: #e8eef6; padding: 0.05rem 0.3rem; border-radius: 4px; }
     .modal-overlay { position: fixed; inset: 0; background: rgba(15,45,92,.45); display: none; align-items: center; justify-content: center; z-index: 200; padding: 1rem; }
     .modal-overlay.show { display: flex; }
     .modal { background: #fff; border-radius: 14px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; padding: 1.35rem; }
@@ -121,15 +134,24 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     .check-row { display: flex; gap: 1.1rem; flex-wrap: wrap; margin: 0.4rem 0 0.85rem; }
     .check-row label { font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+    .check-line { display: flex; align-items: flex-start; gap: 0.55rem; margin-bottom: 0.85rem; font-size: 0.9rem; }
+    .check-line input { margin-top: 0.25rem; }
+    .check-line small { display: block; color: var(--muted); font-size: 0.78rem; }
+    .steps { margin: 0.5rem 0 1rem 1.2rem; font-size: 0.9rem; }
+    .steps li { margin-bottom: 0.35rem; }
     .success-toast { position: fixed; bottom: 1.25rem; right: 1.25rem; background: var(--success); color: #fff; padding: 0.75rem 1.15rem; border-radius: 10px; font-size: 0.9rem; font-weight: 500; display: none; z-index: 300; box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .success-toast.error { background: var(--danger); }
     .success-toast.show { display: block; }
     .empty { color: var(--muted); padding: 1.25rem 0; text-align: center; font-size: 0.9rem; }
     @media (max-width: 720px) {
       .stats { grid-template-columns: 1fr 1fr; }
-      .pp-hero, .pp-about { grid-template-columns: 1fr; }
+      .pp-hero { grid-template-columns: 1fr; }
       .pp-cats, .pp-products { grid-template-columns: 1fr 1fr; }
       .product-row { grid-template-columns: 48px 1fr; }
-      .row-actions { grid-column: 1/-1; justify-content: flex-end; }
+      .product-row .badges, .row-actions { grid-column: 1/-1; }
+      .cat-row { grid-template-columns: 52px 1fr; }
+      .cat-row .cat-blurb, .cat-row .cat-meta, .cat-row .row-actions { grid-column: 1/-1; }
+      .grid-2 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -138,17 +160,14 @@
     <div class="login-box">
       <div class="login-logo">
         <img src="../images/logo.svg" alt="Innovative PNG Ltd">
-        <div class="tagline">Creative · Reliable · Future-Ready</div>
       </div>
       <h1>Admin Login</h1>
       <p class="sub">Edit your product showcase website</p>
       <form id="loginForm">
-        <div class="form-group"><label>Username</label><input type="text" id="username" value="admin" autocomplete="username"></div>
-        <div class="form-group"><label>Password</label><input type="password" id="password" placeholder="Enter password" autocomplete="current-password"></div>
+        <div class="form-group"><label for="password">Password</label><input type="password" id="password" placeholder="Enter password" autocomplete="current-password" autofocus></div>
         <button type="submit" class="btn btn-primary full">Sign In</button>
         <p class="error-msg" id="loginError">Incorrect password. Try again.</p>
       </form>
-      <p class="hint" style="text-align:center;margin-top:1.15rem">Default: <strong>innovative2024</strong> · Change in Settings</p>
     </div>
   </div>
 
@@ -156,188 +175,275 @@
     <header class="admin-header">
       <div class="brand">
         <img src="../images/logo.svg" alt="">
-        <div class="brand-text"><strong>Admin Panel</strong><span>Creative · Reliable · Future-Ready</span></div>
+        <div class="brand-text"><strong>Admin Panel</strong><span id="brandName">Innovative PNG Ltd</span></div>
       </div>
       <div class="actions">
-        <a href="../index.html" target="_blank">View Site</a>
+        <a href="../index.html" target="_blank" rel="noopener">View Site</a>
+        <button class="hdr-btn publish" id="publishBtn" title="Download the file that makes your edits live for everyone">Publish ⬇</button>
         <button class="hdr-btn" id="logoutBtn">Log out</button>
       </div>
     </header>
 
     <div class="admin-body">
+      <div class="status-bar warn" id="passWarn" style="display:none">
+        <span>You are still using the default password. Anyone who has read the project files knows it.</span>
+        <button type="button" id="goChangePass">Change it now</button>
+      </div>
+      <div class="status-bar clean" id="statusBar">
+        <span id="statusText"></span>
+        <span><button type="button" id="statusPublish">Publish</button> <button type="button" id="statusDiscard">Discard edits</button></span>
+      </div>
+
       <div class="stats">
         <div class="stat-card"><div class="label">Products</div><div class="value" id="statTotal">0</div></div>
-        <div class="stat-card"><div class="label">Shown</div><div class="value green" id="statStock">0</div></div>
-        <div class="stat-card"><div class="label">Hidden</div><div class="value muted" id="statOut">0</div></div>
+        <div class="stat-card"><div class="label">Visible on site</div><div class="value green" id="statShown">0</div></div>
+        <div class="stat-card"><div class="label">Out of stock</div><div class="value muted" id="statOut">0</div></div>
         <div class="stat-card"><div class="label">Featured</div><div class="value orange" id="statFeat">0</div></div>
       </div>
 
       <div class="tabs">
         <button class="tab-btn active" data-tab="pages">Page Editor</button>
         <button class="tab-btn" data-tab="products">Products</button>
+        <button class="tab-btn" data-tab="categories">Categories</button>
         <button class="tab-btn" data-tab="site">Business Info</button>
         <button class="tab-btn" data-tab="settings">Settings</button>
-        <button class="tab-btn" data-tab="export">Export / Import</button>
+        <button class="tab-btn" data-tab="publish">Publish &amp; Backup</button>
       </div>
 
+      <!-- ============ PAGE EDITOR ============ -->
       <div class="panel active" id="panel-pages">
         <div class="editor-note">
-          <strong>Visual page editor</strong> — This layout matches your public website. Click any dashed image area to upload a photo. Changes save in this browser and show on the live site when you open it on the same device.
+          <strong>Visual page editor</strong> — This layout matches your public home page. Edit the text right in the preview, click a dashed area to upload a photo, then press the Save button of that section. Edits are a draft until you <strong>Publish</strong>.
         </div>
 
-        <div class="page-preview" id="pagePreview">
-          <div class="pp-topbar"><span>Mount Hagen · Mon–Fri 8am–5pm</span><span>+675 7994 9919</span></div>
-          <div class="pp-header">
-            <img src="../images/logo.svg" alt="Logo">
-            <span style="font-size:0.75rem;color:var(--muted)">Header · logo is fixed</span>
-          </div>
-          <div class="pp-nav"><span>All Products</span><span>Stationery</span><span>Phone</span><span>Charging</span><span>Laptop</span><span>About</span><span>Contact</span></div>
+        <div class="page-preview">
+          <div class="pp-topbar"><span id="ppTopLeft"></span><span id="ppTopRight"></span></div>
+          <div class="pp-header"><img src="../images/logo.svg" alt="Logo"><span style="font-size:0.75rem;color:var(--muted)">Header · logo is fixed · menu follows your Categories</span></div>
+          <div class="pp-nav" id="ppNav"></div>
 
-          <div class="pp-hero">
+          <div class="pp-hero" data-scope="hero">
             <div>
-              <div class="text-edit-row"><input type="text" id="heroHeadline" placeholder="Hero headline"></div>
-              <div class="text-edit-row"><textarea id="heroLead" rows="2" placeholder="Short description under the headline"></textarea></div>
-              <span class="mini-btn">View Products</span>
-              <div class="slot-actions" style="margin-top:0.65rem">
-                <button class="btn btn-primary btn-sm" id="saveHeroBtn">Save hero text</button>
+              <div class="text-edit-row"><label class="mini-label" for="heroHeadline">Headline</label><input type="text" id="heroHeadline" data-bind="hero.headline"></div>
+              <div class="text-edit-row"><label class="mini-label" for="heroLead">Text under the headline</label><textarea id="heroLead" rows="3" data-bind="hero.lead"></textarea></div>
+              <div class="text-edit-row"><label class="mini-label" for="heroBadges">Small badges (separate with commas)</label><input type="text" id="heroBadges" data-bind="hero.badges" data-type="csv"></div>
+              <div class="grid-2">
+                <div class="text-edit-row"><label class="mini-label" for="heroPrimary">Main button</label><input type="text" id="heroPrimary" data-bind="hero.primaryLabel"></div>
+                <div class="text-edit-row"><label class="mini-label" for="heroSecondary">Second button</label><input type="text" id="heroSecondary" data-bind="hero.secondaryLabel"></div>
               </div>
+              <div class="slot-actions"><button class="btn btn-primary btn-sm" data-save="Hero saved">Save hero</button></div>
             </div>
             <div>
-              <div class="img-slot" id="slotHero" data-slot="hero" title="Click to upload hero image">
+              <div class="img-slot" id="slotHero" title="Click to upload hero image">
                 <div class="slot-label">📷 Hero / shop photo<br><small>Click to upload</small></div>
               </div>
-              <input type="file" id="fileHero" accept="image/*">
-              <div class="slot-actions">
-                <button class="btn btn-secondary btn-sm" id="clearHero">Remove image</button>
-              </div>
+              <input type="file" id="fileHero" accept="image/*" hidden>
+              <div class="slot-actions"><button class="btn btn-secondary btn-sm" id="clearHero">Remove image</button></div>
             </div>
           </div>
 
           <div class="pp-section">
-            <h3>Category cards (fixed labels)</h3>
-            <div class="pp-cats">
-              <div class="pp-cat"><strong>📚 Stationery</strong>Books, pens, folders</div>
-              <div class="pp-cat"><strong>📱 Phone</strong>Cases, protectors</div>
-              <div class="pp-cat"><strong>⚡ Charging</strong>Chargers, cables</div>
-              <div class="pp-cat"><strong>💻 Laptop</strong>Mice, bags</div>
-            </div>
+            <h3>Category cards (managed in the Categories tab)</h3>
+            <div class="pp-cats" id="ppCats"></div>
           </div>
 
           <div class="pp-section" style="background:#fafbfc">
-            <h3>Featured products (managed under Products tab)</h3>
+            <h3>Featured products (managed in the Products tab)</h3>
             <div class="pp-products" id="ppFeatured"></div>
-            <p class="hint" style="margin-top:0.5rem">Mark products as Featured in the Products tab to show them here.</p>
+            <p class="hint" style="margin-top:0.5rem">Star a product in the Products tab to feature it here. The home page shows up to the number set in Settings.</p>
           </div>
 
-          <div class="pp-section">
-            <h3>About page photo</h3>
-            <div class="pp-about">
-              <div class="text">
-                <p>This image appears on the About page next to your company story. Use a photo of the shop, team, or storefront.</p>
-              </div>
-              <div>
-                <div class="img-slot light" id="slotAbout" data-slot="about" title="Click to upload about image">
-                  <div class="slot-label">📷 About / team photo<br><small>Click to upload</small></div>
-                </div>
-                <input type="file" id="fileAbout" accept="image/*">
-                <div class="slot-actions"><button class="btn btn-secondary btn-sm" id="clearAbout">Remove image</button></div>
-              </div>
+          <div class="pp-section" data-scope="why">
+            <h3>“Why us” strip — one item per line, written as <em>Title | short text</em></h3>
+            <div class="text-edit-row"><textarea id="whyText" rows="4" data-bind="why" data-type="pairs" aria-label="Why us items"></textarea></div>
+            <button class="btn btn-primary btn-sm" data-save="Strip saved">Save strip</button>
+          </div>
+
+          <div class="pp-section" data-scope="cta">
+            <h3>Call-to-action band</h3>
+            <div class="text-edit-row"><input type="text" data-bind="cta.title" aria-label="Band title"></div>
+            <div class="text-edit-row"><textarea rows="2" data-bind="cta.text" aria-label="Band text"></textarea></div>
+            <button class="btn btn-primary btn-sm" data-save="Band saved">Save band</button>
+          </div>
+        </div>
+
+        <div class="card" data-scope="shop">
+          <h2>Shop page</h2>
+          <div class="form-group"><label>Page title</label><input type="text" data-bind="shop.title"></div>
+          <div class="form-group"><label>Text under the title</label><input type="text" data-bind="shop.subtitle"></div>
+          <button class="btn btn-primary" data-save="Shop page saved">Save shop page</button>
+        </div>
+
+        <div class="card" data-scope="about">
+          <h2>About page</h2>
+          <div class="form-group"><label>Page title</label><input type="text" data-bind="about.title"></div>
+          <div class="form-group"><label>Text under the title</label><input type="text" data-bind="about.subtitle"></div>
+          <div class="form-group"><label>Heading</label><input type="text" data-bind="about.heading"></div>
+          <div class="form-group"><label>Story paragraphs</label><textarea rows="6" data-bind="about.paragraphs" data-type="paras"></textarea><p class="hint">Leave a blank line between paragraphs.</p></div>
+          <div class="form-group"><label>List heading</label><input type="text" data-bind="about.offerHeading"></div>
+          <div class="form-group"><label>List items</label><textarea rows="5" data-bind="about.offers" data-type="lines"></textarea><p class="hint">One item per line. Leave empty to hide the list.</p></div>
+          <div class="form-group">
+            <label>About photo</label>
+            <div class="img-slot light" id="slotAbout" title="Click to upload about image" style="max-width:260px">
+              <div class="slot-label">📷 About / team photo<br><small>Click to upload</small></div>
             </div>
+            <input type="file" id="fileAbout" accept="image/*" hidden>
+            <div class="slot-actions"><button class="btn btn-secondary btn-sm" id="clearAbout">Remove image</button></div>
           </div>
+          <button class="btn btn-primary" data-save="About page saved">Save about page</button>
+        </div>
 
-          <div class="pp-section">
-            <h3>Contact page map / location image</h3>
-            <div class="img-slot light" id="slotMap" data-slot="map" style="min-height:100px;aspect-ratio:21/9" title="Click to upload map image">
+        <div class="card" data-scope="contact">
+          <h2>Contact page</h2>
+          <div class="form-group"><label>Page title</label><input type="text" data-bind="contact.title"></div>
+          <div class="form-group"><label>Text under the title</label><input type="text" data-bind="contact.subtitle"></div>
+          <div class="form-group"><label>Text above the message form</label><input type="text" data-bind="contact.formIntro"></div>
+          <div class="form-group">
+            <label>Map / shop frontage photo</label>
+            <div class="img-slot light" id="slotMap" title="Click to upload map image" style="aspect-ratio:21/9;min-height:100px">
               <div class="slot-label">🗺️ Map or shop frontage<br><small>Click to upload</small></div>
             </div>
-            <input type="file" id="fileMap" accept="image/*">
+            <input type="file" id="fileMap" accept="image/*" hidden>
             <div class="slot-actions"><button class="btn btn-secondary btn-sm" id="clearMap">Remove image</button></div>
           </div>
+          <p class="hint" style="margin-bottom:0.85rem">Address, hours, phone and email come from the Business Info tab.</p>
+          <button class="btn btn-primary" data-save="Contact page saved">Save contact page</button>
         </div>
       </div>
 
+      <!-- ============ PRODUCTS ============ -->
       <div class="panel" id="panel-products">
         <div class="card">
           <div class="card-header">
             <h2>Product catalogue</h2>
             <button class="btn btn-primary btn-sm" id="addProductBtn">+ Add Product</button>
           </div>
-          <p class="hint" style="margin-bottom:0.85rem">Showcase only — no online selling. Prices are indicative for advertising.</p>
+          <p class="hint" style="margin-bottom:0.85rem">Showcase only — no online selling. <strong>Visible</strong> controls whether a product appears on the site at all; <strong>In stock</strong> only changes its badge.</p>
           <div class="toolbar">
-            <input type="search" id="searchProducts" placeholder="Search products…">
-            <select id="filterCategory"><option value="">All categories</option><option value="stationery">Stationery</option><option value="phone">Phone</option><option value="charging">Charging</option><option value="laptop">Laptop</option></select>
-            <select id="filterStock"><option value="">All</option><option value="in">Shown</option><option value="out">Hidden</option></select>
-            <select id="sortProducts"><option value="name">Name</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option><option value="newest">Newest</option></select>
+            <input type="search" id="searchProducts" placeholder="Search products…" aria-label="Search products">
+            <select id="filterCategory" aria-label="Category"></select>
+            <select id="filterVisible" aria-label="Visibility"><option value="">Visible + hidden</option><option value="yes">Visible only</option><option value="no">Hidden only</option></select>
+            <select id="filterStock" aria-label="Stock"><option value="">Any stock</option><option value="in">In stock</option><option value="out">Out of stock</option></select>
+            <select id="sortProducts" aria-label="Sort"><option value="manual">Shop order (manual)</option><option value="name">Name</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option><option value="newest">Newest</option></select>
           </div>
+          <p class="hint" id="orderHint" style="margin:-0.35rem 0 0.75rem"></p>
           <div class="product-list" id="productList"></div>
         </div>
       </div>
 
-      <div class="panel" id="panel-site">
+      <!-- ============ CATEGORIES ============ -->
+      <div class="panel" id="panel-categories">
         <div class="card">
-          <h2>Business information</h2>
-          <div class="form-group"><label>Business Name</label><input type="text" id="siteName"></div>
-          <div class="form-group"><label>Tagline</label><input type="text" id="siteTagline" placeholder="Creative · Reliable · Future-Ready"></div>
-          <div class="grid-2">
-            <div class="form-group"><label>Phone</label><input type="text" id="sitePhone"></div>
-            <div class="form-group"><label>Email</label><input type="email" id="siteEmail"></div>
+          <div class="card-header">
+            <h2>Categories</h2>
+            <button class="btn btn-primary btn-sm" id="addCategoryBtn">+ Add category</button>
           </div>
-          <div class="form-group"><label>Address</label><textarea id="siteAddress" rows="3"></textarea></div>
-          <div class="form-group"><label>Opening Hours</label><input type="text" id="siteHours"></div>
-          <button class="btn btn-primary" id="saveSiteBtn">Save</button>
+          <p class="hint" style="margin-bottom:0.85rem">These drive the menu, the home-page cards, the shop filters and the footer links. Renaming keeps products attached. A category can only be deleted once it has no products.</p>
+          <div id="catList"></div>
+          <button class="btn btn-primary" id="saveCategoriesBtn" style="margin-top:0.5rem">Save categories</button>
         </div>
       </div>
 
+      <!-- ============ BUSINESS INFO ============ -->
+      <div class="panel" id="panel-site">
+        <div class="card" data-scope="site">
+          <h2>Business information</h2>
+          <p class="hint" style="margin:-0.4rem 0 0.85rem">Shown in the header, footer, contact page and anywhere your details appear.</p>
+          <div class="form-group"><label>Business name</label><input type="text" data-bind="site.businessName"></div>
+          <div class="form-group"><label>Tagline (used in the browser tab title)</label><input type="text" data-bind="site.tagline"></div>
+          <div class="form-group"><label>Top bar message</label><input type="text" data-bind="site.topbar"></div>
+          <div class="grid-2">
+            <div class="form-group"><label>Phone</label><input type="text" data-bind="site.phone"></div>
+            <div class="form-group"><label>Email</label><input type="email" data-bind="site.email"></div>
+          </div>
+          <div class="form-group"><label>Address</label><textarea rows="5" data-bind="site.address"></textarea><p class="hint">Each line is shown on its own line.</p></div>
+          <div class="form-group"><label>Opening hours</label><textarea rows="2" data-bind="site.hours"></textarea></div>
+          <div class="form-group"><label>Footer description</label><textarea rows="3" data-bind="site.footerBlurb"></textarea></div>
+          <button class="btn btn-primary" data-save="Business info saved">Save</button>
+        </div>
+      </div>
+
+      <!-- ============ SETTINGS ============ -->
       <div class="panel" id="panel-settings">
+        <div class="card" data-scope="settings">
+          <h2>Shop settings</h2>
+          <div class="grid-2">
+            <div class="form-group"><label>Currency symbol</label><input type="text" maxlength="6" data-bind="settings.currency"></div>
+            <div class="form-group"><label>Note under each price</label><input type="text" data-bind="settings.priceNote" placeholder="e.g. indicative (leave empty for none)"></div>
+          </div>
+          <div class="form-group"><label>Featured products on the home page (1–12)</label><input type="number" min="1" max="12" step="1" data-bind="settings.featuredCount" data-type="num"></div>
+          <label class="check-line"><input type="checkbox" data-bind="settings.showSoldOut" data-type="bool"><span>Show out-of-stock products<small>They appear with a “Currently unavailable” badge. Turn off to hide them from visitors.</small></span></label>
+          <label class="check-line"><input type="checkbox" data-bind="settings.showImagePlaceholders" data-type="bool"><span>Show dashed photo placeholders where no photo has been uploaded<small>Turn off for a clean look until you have real photos.</small></span></label>
+          <div class="form-group"><label>Contact form service URL (optional)</label><input type="url" data-bind="settings.formEndpoint" placeholder="https://formspree.io/f/xxxxxxxx"><p class="hint">Leave empty and the form opens the visitor’s email app with the message ready to send to your email address.</p></div>
+          <button class="btn btn-primary" data-save="Settings saved">Save settings</button>
+        </div>
+
         <div class="card">
           <h2>Change password</h2>
-          <div class="form-group"><label>Current</label><input type="password" id="curPass"></div>
-          <div class="form-group"><label>New</label><input type="password" id="newPass"></div>
-          <div class="form-group"><label>Confirm</label><input type="password" id="newPass2"></div>
+          <p class="hint" style="margin:-0.4rem 0 0.85rem">This only locks the admin screen in a browser. It is not real security — see the README.</p>
+          <div class="form-group"><label>Current</label><input type="password" id="curPass" autocomplete="current-password"></div>
+          <div class="form-group"><label>New (6+ characters)</label><input type="password" id="newPass" autocomplete="new-password"></div>
+          <div class="form-group"><label>Confirm</label><input type="password" id="newPass2" autocomplete="new-password"></div>
           <button class="btn btn-primary" id="changePassBtn">Update Password</button>
         </div>
+
         <div class="card">
           <h2>Quick actions</h2>
           <div style="display:flex;flex-wrap:wrap;gap:0.45rem">
-            <button class="btn btn-secondary btn-sm" id="markAllStock">Show all products</button>
+            <button class="btn btn-secondary btn-sm" id="markAllVisible">Make all products visible</button>
+            <button class="btn btn-secondary btn-sm" id="markAllStock">Mark all in stock</button>
             <button class="btn btn-secondary btn-sm" id="clearFeatured">Clear featured</button>
-            <button class="btn btn-secondary btn-sm" id="sortByName">Sort A–Z</button>
+            <button class="btn btn-secondary btn-sm" id="sortByName">Sort shop order A–Z</button>
           </div>
         </div>
       </div>
 
-      <div class="panel" id="panel-export">
+      <!-- ============ PUBLISH & BACKUP ============ -->
+      <div class="panel" id="panel-publish">
         <div class="card">
-          <h2>Export</h2>
-          <p class="hint" style="margin-bottom:0.75rem">Download a JSON backup of products, images and settings.</p>
-          <button class="btn btn-primary" id="exportBtn">Download JSON</button>
+          <h2>Publish your changes</h2>
+          <p class="hint" style="margin:-0.4rem 0 0.5rem">Edits made here are saved only in <em>this browser</em> as a draft. To show them to every visitor, update the site's content file:</p>
+          <ol class="steps">
+            <li>Click <strong>Download content.js</strong>.</li>
+            <li>Replace <code>js/content.js</code> in the website folder with the downloaded file.</li>
+            <li>Upload / deploy the website again (or commit it to GitHub if it is hosted there).</li>
+            <li>Come back and click <strong>Discard edits</strong> so this browser shows the published copy again.</li>
+          </ol>
+          <button class="btn btn-primary" id="downloadContentBtn">Download content.js</button>
+          <p class="hint" id="contentSize"></p>
         </div>
         <div class="card">
-          <h2>Import</h2>
-          <input type="file" id="importFile" accept=".json,application/json">
-          <button class="btn btn-secondary" id="importBtn" style="margin-top:0.65rem">Import JSON</button>
+          <h2>Backup</h2>
+          <p class="hint" style="margin-bottom:0.75rem">A JSON copy of everything (text, products, photos, settings). Use Import to restore it, or to move your edits to another computer.</p>
+          <button class="btn btn-secondary" id="exportBtn">Download backup (JSON)</button>
+          <div style="margin-top:1rem">
+            <input type="file" id="importFile" accept=".json,application/json">
+            <button class="btn btn-secondary" id="importBtn" style="margin-top:0.65rem">Import backup</button>
+          </div>
         </div>
         <div class="card">
-          <h2>Reset</h2>
-          <button class="btn btn-danger" id="resetBtn">Reset to demo defaults</button>
+          <h2>Discard edits</h2>
+          <p class="hint" style="margin-bottom:0.75rem">Throws away the draft in this browser and goes back to the published content (js/content.js).</p>
+          <button class="btn btn-danger" id="resetBtn">Discard unpublished edits</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Product editor -->
   <div class="modal-overlay" id="productModal">
-    <div class="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <h2 id="modalTitle">Add Product</h2>
       <form id="productForm">
         <input type="hidden" id="productId">
-        <div class="form-group"><label>Name *</label><input type="text" id="prodName" required></div>
+        <div class="form-group"><label for="prodName">Name *</label><input type="text" id="prodName" required></div>
         <div class="grid-2">
-          <div class="form-group"><label>Category</label><select id="prodCategory"><option value="stationery">Stationery</option><option value="phone">Phone</option><option value="charging">Charging</option><option value="laptop">Laptop</option></select></div>
-          <div class="form-group"><label>Price (PGK)</label><input type="number" id="prodPrice" step="0.01" min="0" required></div>
+          <div class="form-group"><label for="prodCategory">Category</label><select id="prodCategory"></select></div>
+          <div class="form-group"><label for="prodPrice">Price</label><input type="number" id="prodPrice" step="0.01" min="0" required></div>
         </div>
-        <div class="form-group"><label>Description</label><textarea id="prodDesc" rows="3"></textarea></div>
+        <div class="form-group"><label for="prodDesc">Description</label><textarea id="prodDesc" rows="3"></textarea></div>
         <div class="check-row">
-          <label><input type="checkbox" id="prodInStock" checked> Show on site</label>
+          <label><input type="checkbox" id="prodVisible" checked> Visible on site</label>
+          <label><input type="checkbox" id="prodInStock" checked> In stock</label>
           <label><input type="checkbox" id="prodFeatured"> Featured</label>
         </div>
         <div class="form-group">
@@ -348,14 +454,15 @@
         </div>
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" id="cancelModal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" id="saveProductBtn">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div class="success-toast" id="toast">Saved</div>
+  <div class="success-toast" id="toast" role="status">Saved</div>
 
+  <script src="../js/content.js"></script>
   <script src="../js/data.js"></script>
   <script src="admin.js"></script>
 </body>

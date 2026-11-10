@@ -4,48 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact | Innovative PNG Ltd – Mount Hagen</title>
+  <meta name="description" content="Visit, call or email Innovative PNG Ltd in Mount Hagen for stationery, phone accessories and laptop essentials.">
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <div class="topbar"><div class="container topbar-inner"><span>Mount Hagen · Western Highlands · Mon–Fri 8am–5pm</span><span><a href="tel:+67579949919">+675 7994 9919</a></span></div></div>
-  <header class="header">
-    <div class="container header-main">
-      <a href="index.html" class="logo" aria-label="Innovative PNG Ltd"><img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img"></a>
-      <form class="search-bar" action="shop.html" method="get"><input type="search" name="q" placeholder="Search products…"><select name="cat"><option value="">All Categories</option><option value="stationery">Stationery</option><option value="phone">Phone</option><option value="charging">Charging</option><option value="laptop">Laptop</option></select><button type="submit">Search</button></form>
-      <div class="header-actions"><a href="contact.html" class="header-link">Enquiry</a><a href="shop.html" class="btn btn-sm btn-primary">Shop</a></div>
+<body data-page="contact">
+  <div id="siteHeader"></div>
+  <noscript><p class="empty-state">This website needs JavaScript turned on to show our contact details.</p></noscript>
+
+  <section class="page-hero">
+    <div class="container">
+      <h1 id="pageTitle">Contact Us</h1>
+      <p id="pageSub"></p>
     </div>
-    <nav class="cat-nav"><div class="container cat-nav-inner"><a href="shop.html">Shop All</a><a href="shop.html#stationery">Stationery</a><a href="shop.html#phone">Phone Accessories</a><a href="shop.html#charging">Charging & Power</a><a href="shop.html#laptop">Laptop Essentials</a><a href="about.html">About</a><a href="contact.html">Contact</a></div></nav>
-  </header>
-  <section class="page-hero"><div class="container"><h1>Contact Us</h1><p>Visit our shop, call us, or send a message.</p></div></section>
+  </section>
+
   <section class="section">
     <div class="container contact-grid">
       <div>
-        <div class="content-card"><h3>Visit the Shop</h3><p>Shop No.01, Sec16, Lot02<br>Tininga Central Road<br>Mount Hagen-281<br>Western Highlands Province<br>Papua New Guinea</p></div>
-        <div class="content-card"><h3>Opening Hours</h3><p>Monday – Friday<br>8:00am – 5:00pm</p></div>
-        <div class="content-card"><h3>Phone & Email</h3><p><a href="tel:+67579949919" style="font-weight:600;color:var(--orange)">+675 7994 9919</a></p><p><a href="mailto:innovativepngltd@gmail.com" style="font-weight:600;color:var(--orange)">innovativepngltd@gmail.com</a></p></div>
+        <div class="content-card"><h3>Visit the Shop</h3><p id="contactAddress"></p></div>
+        <div class="content-card"><h3>Opening Hours</h3><p id="contactHours"></p></div>
+        <div class="content-card"><h3>Phone &amp; Email</h3><div id="contactPhoneEmail"></div></div>
+        <div class="placeholder-image map" data-slot="map"><div><strong>Map / Shop Frontage</strong><br><small>Replace with a real photo</small></div></div>
       </div>
       <div class="content-card">
         <h2 style="margin-bottom:0.5rem">Send a Message</h2>
-        <p style="color:var(--muted);margin-bottom:1.25rem;font-size:0.95rem">For product enquiries, bulk orders or general questions.</p>
+        <p id="formIntro" style="color:var(--muted);margin-bottom:1.25rem;font-size:0.95rem"></p>
         <form id="contactForm">
-          <div class="form-row"><div class="form-group"><label>First Name *</label><input type="text" required></div><div class="form-group"><label>Last Name *</label><input type="text" required></div></div>
-          <div class="form-group"><label>Email *</label><input type="email" required></div>
-          <div class="form-group"><label>Phone</label><input type="tel"></div>
-          <div class="form-group"><label>Message *</label><textarea rows="5" required></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label for="firstName">First Name *</label><input type="text" id="firstName" name="firstName" required autocomplete="given-name"></div>
+            <div class="form-group"><label for="lastName">Last Name *</label><input type="text" id="lastName" name="lastName" required autocomplete="family-name"></div>
+          </div>
+          <div class="form-group"><label for="email">Email *</label><input type="email" id="email" name="email" required autocomplete="email"></div>
+          <div class="form-group"><label for="phone">Phone</label><input type="tel" id="phone" name="phone" autocomplete="tel"></div>
+          <div class="form-group"><label for="message">Message *</label><textarea id="message" name="message" rows="5" required></textarea></div>
           <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
         </form>
       </div>
     </div>
   </section>
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div class="footer-brand"><a href="index.html" class="logo"><img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img"></a><p>Stationery, mobile and laptop accessories in Mount Hagen.</p></div>
-      <div class="footer-links"><h4>Shop</h4><a href="shop.html">All Products</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-      <div class="footer-contact"><h4>Visit Us</h4><p>Tininga Central Road, Mount Hagen-281, WHP<br><a href="tel:+67579949919">+675 7994 9919</a></p></div>
-    </div>
-    <div class="container footer-bottom"><p>© <span id="year"></span> Innovative PNG Ltd</p><p class="admin-link"><a href="admin/index.html">Admin</a></p></div>
-  </footer>
-  <script src="js/data.js"></script><script src="js/main.js"></script>
+
+  <div id="siteFooter"></div>
+
+  <script src="js/content.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

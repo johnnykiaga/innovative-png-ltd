@@ -5,81 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Innovative PNG Ltd | Stationery, Mobile & Laptop Accessories – Mount Hagen</title>
   <meta name="description" content="Mount Hagen stationery, phone accessories and laptop essentials. Quality products for schools, offices and everyday use across the Western Highlands.">
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <div class="topbar">
-    <div class="container topbar-inner">
-      <span>Mount Hagen · Western Highlands · Mon–Fri 8am–5pm</span>
-      <span><a href="tel:+67579949919">+675 7994 9919</a> · <a href="mailto:innovativepngltd@gmail.com">innovativepngltd@gmail.com</a></span>
-    </div>
-  </div>
-  <header class="header">
-    <div class="container header-main">
-      <a href="index.html" class="logo" aria-label="Innovative PNG Ltd">
-        <img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img">
-      </a>
-      <form class="search-bar" action="shop.html" method="get" role="search">
-        <input type="search" name="q" placeholder="Search products…" aria-label="Search products">
-        <select name="cat" aria-label="Category">
-          <option value="">All Categories</option>
-          <option value="stationery">Stationery</option>
-          <option value="phone">Phone Accessories</option>
-          <option value="charging">Charging & Power</option>
-          <option value="laptop">Laptop Essentials</option>
-        </select>
-        <button type="submit">Search</button>
-      </form>
-      <div class="header-actions">
-        <a href="contact.html" class="header-link">Enquiry</a>
-        <a href="shop.html" class="btn btn-sm btn-primary">Shop</a>
-      </div>
-    </div>
-    <nav class="cat-nav">
-      <div class="container cat-nav-inner" id="catNav">
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
-        <a href="shop.html" class="active">Shop All</a>
-        <a href="shop.html#stationery">Stationery</a>
-        <a href="shop.html#phone">Phone Accessories</a>
-        <a href="shop.html#charging">Charging & Power</a>
-        <a href="shop.html#laptop">Laptop Essentials</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-    </nav>
-  </header>
+<body data-page="home">
+  <div id="siteHeader"></div>
+  <noscript><p class="empty-state">This website needs JavaScript turned on to show products and shop details.</p></noscript>
+
   <section class="hero-promo">
     <div class="container hero-promo-inner">
       <div>
-        <div class="hero-badges">
-          <span class="hero-badge">Mount Hagen</span>
-          <span class="hero-badge">Schools & Offices</span>
-          <span class="hero-badge">Creative · Reliable · Future-Ready</span>
-        </div>
-        <h1>Stationery, Mobile & Laptop Accessories</h1>
-        <p class="lead">Quality products for schools, offices and everyday use. Fair prices and practical service in the heart of the Western Highlands.</p>
+        <div class="hero-badges" id="heroBadges"></div>
+        <h1 id="heroTitle"></h1>
+        <p class="lead" id="heroLead"></p>
         <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
-          <a href="shop.html" class="btn btn-primary btn-lg">Browse Products</a>
-          <a href="contact.html" class="btn btn-outline-white btn-lg">Send Enquiry</a>
+          <a href="shop.html" class="btn btn-primary btn-lg" id="heroPrimary"></a>
+          <a href="contact.html" class="btn btn-outline-white btn-lg" id="heroSecondary"></a>
         </div>
       </div>
       <div class="hero-visual">
-        <div class="placeholder-box"><div><strong>Promo / Storefront Banner</strong><br><small>Replace with product or shop photo</small></div></div>
+        <div class="placeholder-box" data-slot="hero"><div><strong>Promo / Storefront Banner</strong><br><small>Replace with product or shop photo</small></div></div>
       </div>
     </div>
   </section>
+
   <section class="section" style="padding-top:0;padding-bottom:2rem;">
     <div class="container">
-      <div class="cat-cards">
-        <a href="shop.html#stationery" class="cat-card"><div class="cat-card-icon">📚</div><h3>Stationery</h3><p>Exercise books, pens, pencils, folders and classroom essentials for schools and offices.</p></a>
-        <a href="shop.html#phone" class="cat-card"><div class="cat-card-icon">📱</div><h3>Phone Accessories</h3><p>Screen protectors, cases, cables and everyday mobile accessories that work.</p></a>
-        <a href="shop.html#charging" class="cat-card"><div class="cat-card-icon">⚡</div><h3>Charging & Power</h3><p>Fast chargers, adapters, cables and power solutions for phones and devices.</p></a>
-        <a href="shop.html#laptop" class="cat-card"><div class="cat-card-icon">💻</div><h3>Laptop Essentials</h3><p>Mice, bags, cables and practical accessories for laptops and workstations.</p></a>
-      </div>
+      <div class="cat-cards" id="catCards"></div>
     </div>
   </section>
+
   <section class="section" style="background:#fff;border-top:1px solid var(--border);">
     <div class="container">
       <h2 class="section-title">Featured Products</h2>
@@ -88,56 +45,30 @@
       <div class="text-center mt-6"><a href="shop.html" class="btn btn-primary">View All Products</a></div>
     </div>
   </section>
+
   <section class="why-strip">
     <div class="container">
-      <div class="why-grid">
-        <div class="why-item"><strong>Local Mount Hagen</strong><span>Based at Tininga Central</span></div>
-        <div class="why-item"><strong>Schools & Offices</strong><span>We supply institutions</span></div>
-        <div class="why-item"><strong>Fair Prices</strong><span>Practical everyday value</span></div>
-        <div class="why-item"><strong>Helpful Service</strong><span>Advice you can trust</span></div>
-      </div>
+      <div class="why-grid" id="whyGrid"></div>
     </div>
   </section>
+
   <section class="cta-band">
     <div class="container cta-band-inner">
       <div>
-        <h2>Need stationery or accessories for your school or office?</h2>
-        <p>Visit us in Mount Hagen or send an enquiry — we’re happy to help with individual purchases and bulk orders.</p>
+        <h2 id="ctaTitle"></h2>
+        <p id="ctaText"></p>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
         <a href="contact.html" class="btn btn-primary btn-lg">Contact Us</a>
-        <a href="tel:+67579949919" class="btn btn-white btn-lg">Call +675 7994 9919</a>
+        <a href="#" class="btn btn-white btn-lg" id="ctaPhone"></a>
       </div>
     </div>
   </section>
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="logo" aria-label="Innovative PNG Ltd"><img src="images/logo.svg" alt="Innovative PNG Ltd" class="logo-img"></a>
-        <p>Stationery, mobile and laptop accessories for schools, offices and everyday customers in Mount Hagen. Creative · Reliable · Future-Ready.</p>
-      </div>
-      <div class="footer-links">
-        <h4>Shop</h4>
-        <a href="shop.html">All Products</a>
-        <a href="shop.html#stationery">Stationery</a>
-        <a href="shop.html#phone">Phone Accessories</a>
-        <a href="shop.html#charging">Charging & Power</a>
-        <a href="shop.html#laptop">Laptop Essentials</a>
-      </div>
-      <div class="footer-contact">
-        <h4>Visit Us</h4>
-        <p>Shop No.01, Sec16, Lot02<br>Tininga Central Road<br>Mount Hagen-281, WHP<br>Papua New Guinea</p>
-        <p><a href="tel:+67579949919">+675 7994 9919</a><br><a href="mailto:innovativepngltd@gmail.com">innovativepngltd@gmail.com</a></p>
-        <p>Mon – Fri: 8:00am – 5:00pm</p>
-      </div>
-    </div>
-    <div class="container footer-bottom">
-      <p>© <span id="year"></span> Innovative PNG Ltd. All rights reserved.</p>
-      <p class="admin-link"><a href="admin/index.html">Admin</a></p>
-    </div>
-  </footer>
+
+  <div id="siteFooter"></div>
+
+  <script src="js/content.js"></script>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
-  <script>document.getElementById('menuToggle')?.addEventListener('click', () => document.getElementById('catNav')?.classList.toggle('open'));</script>
 </body>
 </html>
