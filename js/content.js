@@ -46,8 +46,8 @@ window.SITE_CONTENT = {
     }
   ],
   "hero": {
-    "headline": "dsfdsf",
-    "lead": "dsfdsf",
+    "headline": "",
+    "lead": "",
     "badges": [
       "Mount Hagen",
       "Schools & Offices",
