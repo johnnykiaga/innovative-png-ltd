@@ -168,7 +168,7 @@
     var s = currentData.site;
     $('ppTopLeft').textContent = s.topbar;
     $('ppTopRight').textContent = s.phone;
-    $('ppNav').innerHTML = '<span>Home</span><span>Shop All</span>' + currentData.categories.map(function (c) { return '<span>' + esc(c.label) + '</span>'; }).join('') + '<span>About</span><span>Contact</span>';
+    $('ppNav').innerHTML = '<span>Shop</span><span>About</span><span>Contact</span>';
     $('ppCats').innerHTML = currentData.categories.length
       ? currentData.categories.map(function (c) { return '<div class="pp-cat"><strong>' + esc(c.icon) + ' ' + esc(c.label) + '</strong>' + esc(c.blurb) + '</div>'; }).join('')
       : '<p class="empty" style="grid-column:1/-1">No categories yet</p>';
