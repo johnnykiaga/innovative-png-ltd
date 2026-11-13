@@ -23,8 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var options = '<option value="">All Categories</option>' + cats.map(function (c) {
       return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>';
     }).join('');
-    var navLinks = '<a href="shop.html" data-nav="shop">Shop</a>' +
-      '<a href="about.html" data-nav="about">About</a><a href="contact.html" data-nav="contact">Contact</a>';
+    var navLinks = '<a href="index.html" data-nav="home">Home</a><a href="shop.html" data-nav="shop">Shop All</a>' + cats.map(function (c) {
+      return '<a href="shop.html#' + esc(c.id) + '" data-nav-cat="' + esc(c.id) + '">' + esc(c.label) + '</a>';
+    }).join('') + '<a href="about.html" data-nav="about">About</a><a href="contact.html" data-nav="contact">Contact</a>';
 
     var preview = SD.hasDraft()
       ? '<div class="preview-bar"><span>Preview: you are seeing unpublished admin edits saved in this browser only.</span>' +
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    if (page === 'about' || page === 'contact') {
+    if (page === 'home' || page === 'about' || page === 'contact') {
       var link = host.querySelector('[data-nav="' + page + '"]');
       if (link) link.classList.add('active');
     }
@@ -238,8 +239,11 @@ document.addEventListener('DOMContentLoaded', function () {
         b.classList.toggle('active', on);
         b.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
-      var shopLink = document.querySelector('#catNav [data-nav="shop"]');
-      if (shopLink) shopLink.classList.add('active');
+      document.querySelectorAll('#catNav a').forEach(function (a) {
+        var on = a.hasAttribute('data-nav-cat') ? a.getAttribute('data-nav-cat') === state.cat
+          : (a.getAttribute('data-nav') === 'shop' && !state.cat);
+        a.classList.toggle('active', on);
+      });
       if (searchForm) { searchForm.elements.q.value = state.q; searchForm.elements.cat.value = state.cat; }
     }
 
