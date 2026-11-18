@@ -1,0 +1,10 @@
+# Not part of the public website
+worker
+wrangler.toml
+README.md
+.assetsignore
+.git
+.gitignore
+node_modules
+.wrangler
+.dev.vars

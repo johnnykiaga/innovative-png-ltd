@@ -1,5 +1,5 @@
 // Public site: builds the shared header/footer and each page from SiteData.
-document.addEventListener('DOMContentLoaded', function () {
+window.SiteData.whenReady(function () {
   var SD = window.SiteData;
   var esc = SD.esc, nl2br = SD.nl2br;
   var data = SD.get();

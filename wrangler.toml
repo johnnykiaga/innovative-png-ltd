@@ -1,0 +1,22 @@
+# Cloudflare Worker + static site for Innovative PNG Ltd.
+# Setup steps are in README.md ("Going live on Cloudflare").
+name = "innovative-png-ltd"
+main = "worker/index.js"
+compatibility_date = "2025-01-01"
+
+[assets]
+directory = "./"
+binding = "ASSETS"
+not_found_handling = "404-page"
+# Only these paths start the Worker; every other request is a free static-file hit.
+run_worker_first = ["/api/*", "/img/*"]
+
+# Published site content (one small JSON document)
+[[kv_namespaces]]
+binding = "CONTENT"
+id = "PASTE_KV_NAMESPACE_ID_HERE"
+
+# Photos uploaded from the admin
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "innovative-png-photos"

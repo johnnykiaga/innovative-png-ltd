@@ -182,7 +182,7 @@
       </div>
       <div class="actions">
         <a href="../index.html" target="_blank" rel="noopener">View Site</a>
-        <button class="hdr-btn publish" id="publishBtn" title="Download the file that makes your edits live for everyone">Publish ⬇</button>
+        <button class="hdr-btn publish" id="publishBtn" title="Make your edits live for everyone">Publish</button>
         <button class="hdr-btn" id="logoutBtn">Log out</button>
       </div>
     </header>
@@ -402,16 +402,27 @@
 
       <!-- ============ PUBLISH & BACKUP ============ -->
       <div class="panel" id="panel-publish">
+        <div class="card" id="liveCard">
+          <h2>Live publishing</h2>
+          <p class="hint" style="margin:-0.4rem 0 0.75rem" id="liveStatus">Paste your admin token to publish straight to the website and upload photos to the cloud. The token is stored in this browser only.</p>
+          <div class="form-group"><label for="adminToken">Admin token</label><input type="password" id="adminToken" autocomplete="off" placeholder="The token you set with: wrangler secret put ADMIN_TOKEN"></div>
+          <button class="btn btn-secondary" id="saveTokenBtn">Save &amp; test connection</button>
+          <button class="btn btn-secondary" id="clearTokenBtn" style="display:none">Remove token</button>
+        </div>
         <div class="card">
           <h2>Publish your changes</h2>
-          <p class="hint" style="margin:-0.4rem 0 0.5rem">Edits made here are saved only in <em>this browser</em> as a draft. To show them to every visitor, update the site's content file:</p>
-          <ol class="steps">
-            <li>Click <strong>Download content.js</strong>.</li>
-            <li>Replace <code>js/content.js</code> in the website folder with the downloaded file.</li>
-            <li>Upload / deploy the website again (or commit it to GitHub if it is hosted there).</li>
-            <li>Come back and click <strong>Discard edits</strong> so this browser shows the published copy again.</li>
-          </ol>
-          <button class="btn btn-primary" id="downloadContentBtn">Download content.js</button>
+          <p class="hint" style="margin:-0.4rem 0 0.5rem">Edits are saved only in <em>this browser</em> as a draft until you publish. With live publishing connected, <strong>Publish</strong> (top right) updates the website within about a minute. No downloads or redeploys are needed.</p>
+          <button class="btn btn-primary" id="publishLiveBtn">Publish now</button>
+          <details style="margin-top:1rem">
+            <summary class="hint" style="cursor:pointer">No live publishing? Publish by file instead</summary>
+            <ol class="steps">
+              <li>Click <strong>Download content.js</strong>.</li>
+              <li>Replace <code>js/content.js</code> in the website folder with the downloaded file.</li>
+              <li>Deploy the website again (or commit it to GitHub if it is hosted there).</li>
+              <li>Come back and click <strong>Discard edits</strong>.</li>
+            </ol>
+            <button class="btn btn-secondary" id="downloadContentBtn">Download content.js</button>
+          </details>
           <p class="hint" id="contentSize"></p>
         </div>
         <div class="card">
@@ -425,7 +436,7 @@
         </div>
         <div class="card">
           <h2>Discard edits</h2>
-          <p class="hint" style="margin-bottom:0.75rem">Throws away the draft in this browser and goes back to the published content (js/content.js).</p>
+          <p class="hint" style="margin-bottom:0.75rem">Throws away the draft in this browser and goes back to the published content.</p>
           <button class="btn btn-danger" id="resetBtn">Discard unpublished edits</button>
         </div>
       </div>

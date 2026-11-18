@@ -1,5 +1,5 @@
 // Hero background from content: images.heroBg + images.heroBgPos
-document.addEventListener('DOMContentLoaded', function () {
+window.SiteData.whenReady(function () {
   try {
     var data = window.SiteData && window.SiteData.get();
     if (!data || !data.images) return;

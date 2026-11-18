@@ -42,11 +42,40 @@
   }
 
   // ---------- Login / logout ----------
+  var liveReady = SD.loadLive();   // newest published content, if the Worker is deployed
+  var TOKEN_KEY = 'ipng_admin_token';
+  function getToken() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function authHeaders(extra) { var h = { Authorization: 'Bearer ' + getToken() }; for (var k in (extra || {})) h[k] = extra[k]; return h; }
+  function apiUrl(path) { return (window.SITE_BASE || '') + 'api/' + path; }
+  function refreshLiveUi() {
+    var has = !!getToken();
+    $('clearTokenBtn').style.display = has ? '' : 'none';
+    $('adminToken').value = has ? '••••••••••••' : '';
+    $('publishBtn').textContent = has ? 'Publish' : 'Publish ⬇';
+    $('liveStatus').textContent = has
+      ? 'A token is saved in this browser. Publish and photo uploads go straight to the website.'
+      : 'Paste your admin token to publish straight to the website and upload photos to the cloud. The token is stored in this browser only.';
+  }
+  $('saveTokenBtn').addEventListener('click', function () {
+    var v = $('adminToken').value.trim();
+    if (!v || /^•+$/.test(v)) { alert('Paste the admin token first.'); return; }
+    fetch(apiUrl('auth'), { headers: { Authorization: 'Bearer ' + v } }).then(function (r) {
+      if (r.ok) { try { localStorage.setItem(TOKEN_KEY, v); } catch (e) {} refreshLiveUi(); toast('Connected — live publishing is on'); }
+      else if (r.status === 401) alert('That token was not accepted. Check it and try again.');
+      else alert('Live publishing is not set up on this website yet (the Worker did not answer).');
+    }).catch(function () { alert('Could not reach the website’s API. Is the Worker deployed?'); });
+  });
+  $('clearTokenBtn').addEventListener('click', function () {
+    try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    refreshLiveUi(); toast('Token removed');
+  });
+
   function showAdmin() {
     $('loginScreen').style.display = 'none';
     $('adminWrap').classList.add('active');
     currentData = SD.get();
     renderAll();
+    refreshLiveUi();
   }
   function showLogin() {
     $('loginScreen').style.display = 'flex';
@@ -55,7 +84,7 @@
   }
   $('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
-    if ($('password').value === getPassword()) { setLoggedIn(true); $('loginError').classList.remove('show'); showAdmin(); }
+    if ($('password').value === getPassword()) { setLoggedIn(true); $('loginError').classList.remove('show'); liveReady.then(showAdmin); }
     else $('loginError').classList.add('show');
   });
   $('logoutBtn').addEventListener('click', function () { setLoggedIn(false); showLogin(); });
@@ -228,6 +257,19 @@
     fr.readAsDataURL(file);
   }
 
+  // Sends a compressed photo to the cloud (R2) when live publishing is on; otherwise keeps it embedded.
+  function storeImage(dataUrl, cb) {
+    if (!getToken() || dataUrl.indexOf('data:') !== 0) { cb(dataUrl); return; }
+    fetch(dataUrl).then(function (r) { return r.blob(); }).then(function (blob) {
+      return fetch(apiUrl('upload'), { method: 'POST', headers: authHeaders({ 'Content-Type': blob.type }), body: blob });
+    }).then(function (r) {
+      return r.json().then(function (j) { if (!r.ok || !j.path) throw new Error(j.error || r.status); cb(j.path); });
+    }).catch(function (e) {
+      toast('Cloud upload failed (' + e.message + ') — photo kept inside the content instead', true);
+      cb(dataUrl);
+    });
+  }
+
   function bindSlot(slotId, fileId, key, clearId) {
     var slot = $(slotId), file = $(fileId);
     slot.addEventListener('click', function () { file.click(); });
@@ -237,8 +279,10 @@
       if (f.size > 12 * 1024 * 1024) { alert('Please use an image under 12 MB.'); file.value = ''; return; }
       compressImage(f, 1600, function (url) {
         if (!url) { alert('That file could not be read as an image.'); file.value = ''; return; }
-        if (change(function () { currentData.images[key] = url; }, 'Image saved')) setSlotImage(slot, currentData.images[key]);
-        file.value = '';
+        storeImage(url, function (stored) {
+          if (change(function () { currentData.images[key] = stored; }, 'Image saved')) setSlotImage(slot, currentData.images[key]);
+          file.value = '';
+        });
       });
     });
     $(clearId).addEventListener('click', function (e) {
@@ -487,9 +531,11 @@
     if (file.size > 12 * 1024 * 1024) { alert('Please use an image under 12 MB.'); e.target.value = ''; return; }
     compressImage(file, 900, function (url) {
       if (!url) { alert('That file could not be read as an image.'); return; }
-      currentImageData = url;
-      $('imagePreview').innerHTML = '<img src="' + esc(SD.img(currentImageData)) + '" alt="">';
-      $('removeImageBtn').style.display = '';
+      storeImage(url, function (stored) {
+        currentImageData = stored;
+        $('imagePreview').innerHTML = '<img src="' + esc(SD.img(currentImageData)) + '" alt="">';
+        $('removeImageBtn').style.display = '';
+      });
     });
   });
   $('removeImageBtn').addEventListener('click', function () {
@@ -563,12 +609,30 @@
     var kb = Math.round(size / 1024);
     $('contentSize').textContent = 'content.js will be about ' + kb + ' KB.' + (size > 800 * 1024 ? ' That is large because photos are embedded in it. For a faster site, save photos as files in the images folder and type their path (for example images/products/pen.webp) instead.' : '');
   }
-  function publish() {
+  function publishFile() {
     download('content.js', SD.toContentJs(currentData), 'text/javascript');
     toast('content.js downloaded — now replace js/content.js with it');
   }
+  function publish() {
+    if (!getToken()) { publishFile(); return; }
+    var body = JSON.stringify(SD.normalize(currentData));
+    toast('Publishing…');
+    fetch(apiUrl('content'), { method: 'PUT', headers: authHeaders({ 'Content-Type': 'application/json' }), body: body })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          if (!r.ok) throw new Error(j.error || ('error ' + r.status));
+          window.SITE_CONTENT = JSON.parse(body);
+          SD.clearDraft();
+          currentData = SD.get();
+          renderAll();
+          toast('Published — visitors see it within about a minute');
+        });
+      })
+      .catch(function (e) { alert('Publishing failed: ' + e.message + '\n\nYour edits are still saved as a draft in this browser.'); toast('Not published', true); });
+  }
   $('publishBtn').addEventListener('click', publish);
-  $('downloadContentBtn').addEventListener('click', publish);
+  $('publishLiveBtn').addEventListener('click', publish);
+  $('downloadContentBtn').addEventListener('click', publishFile);
 
   $('exportBtn').addEventListener('click', function () {
     download('innovative-png-backup.json', JSON.stringify(SD.normalize(currentData), null, 2), 'application/json');
@@ -603,5 +667,5 @@
   $('resetBtn').addEventListener('click', discardDraft);
   $('statusDiscard').addEventListener('click', discardDraft);
 
-  if (isLoggedIn()) showAdmin();
+  if (isLoggedIn()) liveReady.then(showAdmin);
 })();
