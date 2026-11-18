@@ -15,6 +15,14 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  // Turns an image path from the content into a usable URL. Embedded (data:)
+  // images and full web addresses are left alone; relative paths such as
+  // "images/hero.webp" get window.SITE_BASE in front (the admin sets it to "../").
+  function img(src) {
+    src = String(src || '');
+    if (!src || /^(data:|https?:|blob:|\/)/i.test(src)) return src;
+    return (window.SITE_BASE || '') + src;
+  }
   function nl2br(s) { return esc(s).replace(/\r?\n/g, '<br>'); }
   function telHref(phone) { return 'tel:' + String(phone || '').replace(/[^\d+]/g, ''); }
   function isObj(v) { return v && typeof v === 'object' && !Array.isArray(v); }
@@ -134,7 +142,7 @@
 
   window.SiteData = {
     get: get, save: save, normalize: normalize, hasDraft: hasDraft, clearDraft: clearDraft,
-    toContentJs: toContentJs, esc: esc, nl2br: nl2br, telHref: telHref,
+    toContentJs: toContentJs, img: img, esc: esc, nl2br: nl2br, telHref: telHref,
     defaults: function () { return normalize(clone(window.SITE_CONTENT)); }
   };
 })();

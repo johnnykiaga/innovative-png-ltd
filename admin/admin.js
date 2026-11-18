@@ -182,7 +182,7 @@
     list.forEach(function (p) {
       var d = document.createElement('div');
       d.className = 'pp-prod';
-      d.innerHTML = '<div class="pp-prod-img">' + (p.image ? '<img src="' + esc(p.image) + '" alt="">' : 'No photo') + '</div><div class="pp-prod-body"><strong>' + esc(p.name) + '</strong><span>' + esc(currentData.settings.currency + Number(p.price).toFixed(2)) + '</span></div>';
+      d.innerHTML = '<div class="pp-prod-img">' + (p.image ? '<img src="' + esc(SD.img(p.image)) + '" alt="">' : 'No photo') + '</div><div class="pp-prod-body"><strong>' + esc(p.name) + '</strong><span>' + esc(currentData.settings.currency + Number(p.price).toFixed(2)) + '</span></div>';
       box.appendChild(d);
     });
   }
@@ -200,11 +200,32 @@
     if (dataUrl) {
       slotEl.classList.add('has-image');
       if (!img) { img = document.createElement('img'); img.alt = ''; slotEl.appendChild(img); }
-      img.src = dataUrl;
+      img.src = SD.img(dataUrl);
     } else {
       slotEl.classList.remove('has-image');
       if (img) img.remove();
     }
+  }
+
+  // Shrinks an uploaded photo (max 1200px wide, WebP/JPEG) so it stays small.
+  function compressImage(file, maxW, cb) {
+    var fr = new FileReader();
+    fr.onerror = function () { cb(null); };
+    fr.onload = function (ev) {
+      var im = new Image();
+      im.onerror = function () { cb(null); };
+      im.onload = function () {
+        var w = im.naturalWidth, h = im.naturalHeight;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(im, 0, 0, w, h);
+        var out = c.toDataURL('image/webp', 0.82);
+        if (out.indexOf('data:image/webp') !== 0) out = c.toDataURL('image/jpeg', 0.82);
+        cb(out.length < ev.target.result.length ? out : ev.target.result);
+      };
+      im.src = ev.target.result;
+    };
+    fr.readAsDataURL(file);
   }
 
   function bindSlot(slotId, fileId, key, clearId) {
@@ -213,13 +234,12 @@
     file.addEventListener('change', function (e) {
       var f = e.target.files[0];
       if (!f) return;
-      if (f.size > 2 * 1024 * 1024) { alert('Please use an image under 2 MB.'); file.value = ''; return; }
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        if (change(function () { currentData.images[key] = ev.target.result; }, 'Image saved')) setSlotImage(slot, currentData.images[key]);
+      if (f.size > 12 * 1024 * 1024) { alert('Please use an image under 12 MB.'); file.value = ''; return; }
+      compressImage(f, 1600, function (url) {
+        if (!url) { alert('That file could not be read as an image.'); file.value = ''; return; }
+        if (change(function () { currentData.images[key] = url; }, 'Image saved')) setSlotImage(slot, currentData.images[key]);
         file.value = '';
-      };
-      reader.readAsDataURL(f);
+      });
     });
     $(clearId).addEventListener('click', function (e) {
       e.stopPropagation();
@@ -359,7 +379,7 @@
     host.innerHTML = products.map(function (p, idx) {
       var label = categoryLabel(p.category);
       var catHtml = label ? esc(label) : '<span class="nocat">no category</span>';
-      var thumb = p.image ? '<img src="' + esc(p.image) + '" alt="">' : 'No photo';
+      var thumb = p.image ? '<img src="' + esc(SD.img(p.image)) + '" alt="">' : 'No photo';
       var badges = '<span class="badge ' + (p.visible ? '' : 'off') + '">' + (p.visible ? 'Visible' : 'Hidden') + '</span>' +
         '<span class="badge ' + (p.inStock ? '' : 'out') + '">' + (p.inStock ? 'In stock' : 'Out of stock') + '</span>' +
         (p.featured ? '<span class="badge feat">Featured</span>' : '');
@@ -440,7 +460,7 @@
       $('prodVisible').checked = p.visible;
       $('prodInStock').checked = p.inStock;
       $('prodFeatured').checked = p.featured;
-      if (p.image) { preview.innerHTML = '<img src="' + esc(p.image) + '" alt="">'; currentImageData = p.image; removeBtn.style.display = ''; }
+      if (p.image) { preview.innerHTML = '<img src="' + esc(SD.img(p.image)) + '" alt="">'; currentImageData = p.image; removeBtn.style.display = ''; }
       else { preview.textContent = 'No image'; removeBtn.style.display = 'none'; }
     } else {
       $('modalTitle').textContent = 'Add Product';
@@ -464,14 +484,13 @@
   $('prodImage').addEventListener('change', function (e) {
     var file = e.target.files[0];
     if (!file) return;
-    if (file.size > 1.5 * 1024 * 1024) { alert('Please use an image under 1.5 MB.'); e.target.value = ''; return; }
-    var reader = new FileReader();
-    reader.onload = function (ev) {
-      currentImageData = ev.target.result;
-      $('imagePreview').innerHTML = '<img src="' + esc(currentImageData) + '" alt="">';
+    if (file.size > 12 * 1024 * 1024) { alert('Please use an image under 12 MB.'); e.target.value = ''; return; }
+    compressImage(file, 900, function (url) {
+      if (!url) { alert('That file could not be read as an image.'); return; }
+      currentImageData = url;
+      $('imagePreview').innerHTML = '<img src="' + esc(SD.img(currentImageData)) + '" alt="">';
       $('removeImageBtn').style.display = '';
-    };
-    reader.readAsDataURL(file);
+    });
   });
   $('removeImageBtn').addEventListener('click', function () {
     currentImageData = null;
@@ -542,7 +561,7 @@
   function updatePublishInfo() {
     var size = new Blob([SD.toContentJs(currentData)]).size;
     var kb = Math.round(size / 1024);
-    $('contentSize').textContent = 'content.js will be about ' + kb + ' KB.' + (size > 800 * 1024 ? ' That is large because photos are embedded in it. For a faster site, keep photos as image files in the images folder instead.' : '');
+    $('contentSize').textContent = 'content.js will be about ' + kb + ' KB.' + (size > 800 * 1024 ? ' That is large because photos are embedded in it. For a faster site, save photos as files in the images folder and type their path (for example images/products/pen.webp) instead.' : '');
   }
   function publish() {
     download('content.js', SD.toContentJs(currentData), 'text/javascript');

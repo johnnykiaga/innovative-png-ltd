@@ -6,7 +6,10 @@
   <meta name="robots" content="noindex, nofollow">
   <title>Admin | Innovative PNG Ltd</title>
   <link rel="icon" type="image/svg+xml" href="../images/logo.svg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('../fonts/inter-latin-wght-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Plus Jakarta Sans'; font-style: normal; font-weight: 200 800; font-display: swap; src: url('../fonts/plus-jakarta-sans-latin-wght-normal.woff2') format('woff2'); }
+  </style>
   <style>
     :root {
       --blue: #1a4a8c; --blue-dark: #0f2d5c; --blue-mid: #2b6cb0;
@@ -462,6 +465,7 @@
 
   <div class="success-toast" id="toast" role="status">Saved</div>
 
+  <script>window.SITE_BASE = '../';</script>
   <script src="../js/content.js"></script>
   <script src="../js/data.js"></script>
   <script src="admin.js"></script>

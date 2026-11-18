@@ -1,0 +1,49 @@
+# Cloudflare Workers/Pages static headers
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Pages: always check for the newest version (cheap 304 when unchanged)
+# (listed one by one because rules that overlap get their headers merged)
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/shop
+  Cache-Control: public, max-age=0, must-revalidate
+/shop.html
+  Cache-Control: public, max-age=0, must-revalidate
+/about
+  Cache-Control: public, max-age=0, must-revalidate
+/about.html
+  Cache-Control: public, max-age=0, must-revalidate
+/contact
+  Cache-Control: public, max-age=0, must-revalidate
+/contact.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Site content: short cache so published edits show up within minutes
+/js/content.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+/js/main.js
+  Cache-Control: public, max-age=3600, must-revalidate
+/js/data.js
+  Cache-Control: public, max-age=3600, must-revalidate
+/js/hero-bg.js
+  Cache-Control: public, max-age=3600, must-revalidate
+/css/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Fonts never change
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Photos: one day, then refresh in the background for a week
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Admin panel: never cached, never indexed
+/admin/*
+  Cache-Control: no-store
+  X-Robots-Tag: noindex, nofollow

@@ -56,7 +56,14 @@ Why this approach? For a demo it needs no server, no accounts and no monthly cos
 
 ## Photos
 
-Photo areas show dashed placeholders until you upload a photo (Settings can hide the placeholders for a cleaner look). Uploaded photos are stored inside the content as base64, which is fine for a few photos but makes `content.js` large. For a faster live site, put photo files in the `images/` folder and use their paths instead of uploading in the admin. The browser also limits draft storage to roughly 5 MB; the admin will tell you if it is full.
+Photo areas show dashed placeholders until you upload a photo (Settings can hide the placeholders for a cleaner look).
+
+Photos you upload in the admin are automatically shrunk (max 1600 px for page photos, 900 px for products) and stored inside the content. That works, but each photo adds weight to `content.js`. **For the fastest live site**, save the photo as a `.webp` file in `images/` (e.g. `images/products/pen.webp`), deploy it, and put that path in the content instead of the embedded copy. The two photos already on the site (`images/hero.webp`, `images/products/product-11.webp`) are done this way. The browser also limits draft storage to roughly 5 MB; the admin will tell you if it is full.
+
+## Speed and hosting files
+
+- `_headers` – cache and security headers for Cloudflare (Workers static assets or Pages). Fonts cache for a year, photos for a day, `content.js` for 5 minutes, and `/admin/*` is never cached or indexed.
+- `fonts/` – Inter and Plus Jakarta Sans are served from this site, so no request goes to Google.
 
 ## Admin password
 

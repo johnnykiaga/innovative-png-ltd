@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var src = data.images[name];
       if (src) {
         el.className = 'site-image ' + cls;
-        el.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt) + '">';
+        el.innerHTML = '<img src="' + esc(SD.img(src)) + '" alt="' + esc(alt) + '">';
         shown = true;
       } else if (st.showImagePlaceholders) {
         shown = true;
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
     card.dataset.category = p.category;
     var badge = p.inStock ? '' : '<span class="product-badge soldout">Currently unavailable</span>';
     var img = p.image
-      ? '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy">'
+      ? '<img src="' + esc(SD.img(p.image)) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">'
       : '<span style="opacity:0.55">Product photo<br><small>coming soon</small></span>';
     var cat = catById[p.category] ? catById[p.category].label : p.category;
     card.innerHTML =
