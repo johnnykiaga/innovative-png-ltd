@@ -1,5 +1,5 @@
 // Hero background from content: images.heroBg + images.heroBgPos
-document.addEventListener('DOMContentLoaded', function () {
+window.SiteData.whenReady(function () {
   try {
     var data = window.SiteData && window.SiteData.get();
     if (!data || !data.images) return;
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var pos = data.images.heroBgPos || 'center center';
     if (src) {
       hero.classList.add('has-bg');
-      hero.style.backgroundImage = 'url("' + String(src).replace(/"/g, '%22') + '")';
+      hero.style.backgroundImage = 'url("' + String(window.SiteData.img(src)).replace(/"/g, '%22') + '")';
       hero.style.backgroundPosition = pos;
       hero.style.backgroundSize = 'cover';
       hero.style.backgroundRepeat = 'no-repeat';

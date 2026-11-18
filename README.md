@@ -56,7 +56,36 @@ Why this approach? For a demo it needs no server, no accounts and no monthly cos
 
 ## Photos
 
-Photo areas show dashed placeholders until you upload a photo (Settings can hide the placeholders for a cleaner look). Uploaded photos are stored inside the content as base64, which is fine for a few photos but makes `content.js` large. For a faster live site, put photo files in the `images/` folder and use their paths instead of uploading in the admin. The browser also limits draft storage to roughly 5 MB; the admin will tell you if it is full.
+Photo areas show dashed placeholders until you upload a photo (Settings can hide the placeholders for a cleaner look).
+
+Photos you upload in the admin are automatically shrunk (max 1600 px for page photos, 900 px for products) and stored inside the content. That works, but each photo adds weight to `content.js`. **For the fastest live site**, save the photo as a `.webp` file in `images/` (e.g. `images/products/pen.webp`), deploy it, and put that path in the content instead of the embedded copy. The two photos already on the site (`images/hero.webp`, `images/products/product-11.webp`) are done this way. The browser also limits draft storage to roughly 5 MB; the admin will tell you if it is full.
+
+## Going live on Cloudflare (live publishing)
+
+The site is plain static files, plus one small Worker (`worker/index.js`) that lets the admin publish instantly. KV stores the published content and R2 stores uploaded photos. Everything fits in Cloudflare's free tiers. R2 asks for a payment method when you enable it, but it is free within the free allowance.
+
+One-time setup, from a terminal in this folder (needs Node.js):
+
+1. `npx wrangler login`
+2. `npx wrangler kv namespace create CONTENT` and paste the `id` it prints into `wrangler.toml` (replace `PASTE_KV_NAMESPACE_ID_HERE`).
+3. `npx wrangler r2 bucket create innovative-png-photos`
+4. `npx wrangler deploy`
+5. Make an admin token (at least 12 characters, e.g. `openssl rand -base64 24`) and store it: `npx wrangler secret put ADMIN_TOKEN`
+6. Open `https://<your-site>/admin/`, go to **Publish & Backup**, paste the token and click **Save & test connection**, then **Publish now** once.
+
+After that: edit in the admin, click **Publish**, and visitors see it within about a minute. Photo uploads go to R2 and are stored as `img/uploads/...` paths. Redeploy (`npx wrangler deploy`) only when you change code or files in `images/`.
+
+Protect the admin page as well: in Cloudflare Zero Trust, add an Access application for `<your-site>/admin*` (free for up to 50 users). The token protects publishing and uploads, and Access stops strangers from opening the admin at all. Don't put Access on `/api/*`, because visitors need `/api/content`.
+
+How it behaves:
+- If the Worker is not deployed (or is down), the site quietly falls back to `js/content.js`, so it never shows an empty page.
+- The Worker keeps the previous published version in KV (`content:previous`) in case you need to roll back.
+- To rehearse locally: create a `.dev.vars` file containing `ADMIN_TOKEN=some-long-test-token`, then run `npx wrangler dev`.
+
+## Speed and hosting files
+
+- `_headers` – cache and security headers for Cloudflare (Workers static assets or Pages). Fonts cache for a year, photos for a day, `content.js` for 5 minutes, and `/admin/*` is never cached or indexed.
+- `fonts/` – Inter and Plus Jakarta Sans are served from this site, so no request goes to Google.
 
 ## Admin password
 

@@ -1,5 +1,5 @@
 // Public site: builds the shared header/footer and each page from SiteData.
-document.addEventListener('DOMContentLoaded', function () {
+window.SiteData.whenReady(function () {
   var SD = window.SiteData;
   var esc = SD.esc, nl2br = SD.nl2br;
   var data = SD.get();
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var options = '<option value="">All Categories</option>' + cats.map(function (c) {
       return '<option value="' + esc(c.id) + '">' + esc(c.label) + '</option>';
     }).join('');
-    var navLinks = '<a href="shop.html" data-nav="shop">Shop</a>' +
+    var navLinks = '<a href="index.html" data-nav="home">Home</a><a href="shop.html" data-nav="shop">Shop</a>' +
       '<a href="about.html" data-nav="about">About</a><a href="contact.html" data-nav="contact">Contact</a>';
 
     var preview = SD.hasDraft()
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    if (page === 'about' || page === 'contact') {
+    if (page === 'home' || page === 'about' || page === 'contact') {
       var link = host.querySelector('[data-nav="' + page + '"]');
       if (link) link.classList.add('active');
     }
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var src = data.images[name];
       if (src) {
         el.className = 'site-image ' + cls;
-        el.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(alt) + '">';
+        el.innerHTML = '<img src="' + esc(SD.img(src)) + '" alt="' + esc(alt) + '">';
         shown = true;
       } else if (st.showImagePlaceholders) {
         shown = true;
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
     card.dataset.category = p.category;
     var badge = p.inStock ? '' : '<span class="product-badge soldout">Currently unavailable</span>';
     var img = p.image
-      ? '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" loading="lazy">'
+      ? '<img src="' + esc(SD.img(p.image)) + '" alt="' + esc(p.name) + '" loading="lazy" decoding="async">'
       : '<span style="opacity:0.55">Product photo<br><small>coming soon</small></span>';
     var cat = catById[p.category] ? catById[p.category].label : p.category;
     card.innerHTML =

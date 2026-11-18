@@ -15,6 +15,14 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  // Turns an image path from the content into a usable URL. Embedded (data:)
+  // images and full web addresses are left alone; relative paths such as
+  // "images/hero.webp" get window.SITE_BASE in front (the admin sets it to "../").
+  function img(src) {
+    src = String(src || '');
+    if (!src || /^(data:|https?:|blob:|\/)/i.test(src)) return src;
+    return (window.SITE_BASE || '') + src;
+  }
   function nl2br(s) { return esc(s).replace(/\r?\n/g, '<br>'); }
   function telHref(phone) { return 'tel:' + String(phone || '').replace(/[^\d+]/g, ''); }
   function isObj(v) { return v && typeof v === 'object' && !Array.isArray(v); }
@@ -132,9 +140,37 @@
       'window.SITE_CONTENT = ' + JSON.stringify(normalize(data), null, 2) + ';\n';
   }
 
+  // ---------- Live content (optional) ----------
+  // If the Cloudflare Worker is deployed, the newest published content comes from
+  // /api/content. If not (plain static hosting, file://, Worker down), the site
+  // quietly uses js/content.js instead.
+  var livePromise = null;
+  function loadLive() {
+    if (livePromise) return livePromise;
+    livePromise = new Promise(function (resolve) {
+      if (!window.fetch || location.protocol === 'file:') return resolve(false);
+      var ctrl = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctrl) ctrl.abort(); resolve(false); }, 3000);
+      fetch((window.SITE_BASE || '') + 'api/content', { signal: ctrl ? ctrl.signal : undefined, headers: { Accept: 'application/json' } })
+        .then(function (r) { if (!r.ok) throw new Error('no live content'); return r.json(); })
+        .then(function (j) {
+          clearTimeout(timer);
+          if (j && Array.isArray(j.products) && j.site) { window.SITE_CONTENT = j; resolve(true); } else resolve(false);
+        })
+        .catch(function () { clearTimeout(timer); resolve(false); });
+    });
+    return livePromise;
+  }
+  var domReady = new Promise(function (resolve) {
+    if (document.readyState !== 'loading') resolve();
+    else document.addEventListener('DOMContentLoaded', resolve);
+  });
+  // Runs fn once the page is ready AND the live content (if any) has been fetched.
+  function whenReady(fn) { Promise.all([domReady, loadLive()]).then(function () { fn(); }); }
+
   window.SiteData = {
     get: get, save: save, normalize: normalize, hasDraft: hasDraft, clearDraft: clearDraft,
-    toContentJs: toContentJs, esc: esc, nl2br: nl2br, telHref: telHref,
+    toContentJs: toContentJs, loadLive: loadLive, whenReady: whenReady, img: img, esc: esc, nl2br: nl2br, telHref: telHref,
     defaults: function () { return normalize(clone(window.SITE_CONTENT)); }
   };
 })();
